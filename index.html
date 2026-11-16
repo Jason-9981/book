@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="zh-HK" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="version" content="v4.0" />
+  <meta name="build-date" content="2026-11-13" />
+  <title>好書研究所 by AJ Studio | 世界名著精讀與財經投資實驗室 v4.0</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff', 100: '#e0f2fe', 500: '#0284c7',
+              600: '#0369a1', 700: '#075985', 800: '#0c4a6e', 900: '#082f49'
+            },
+            carnegie: {
+              50: '#fdf4ff', 100: '#fae8ff', 500: '#a855f7',
+              600: '#9333ea', 700: '#7e22ce', 800: '#6b21a8'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+HK:wght@300;400;500;700&display=swap');
+    body {
+      font-family: 'Noto Sans HK', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); border-radius: 3px; }
+    .toc-item-active {
+      background: linear-gradient(90deg, rgba(147,51,234,0.14), rgba(79,70,229,0.06));
+      border-left: 3px solid #9333ea;
+      font-weight: 700;
+    }
+    .dark .toc-item-active {
+      background: linear-gradient(90deg, rgba(168,85,247,0.22), rgba(99,102,241,0.08));
+      border-left: 3px solid #c084fc;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 flex flex-col min-h-screen transition-colors duration-200 pb-20">
+
+  <!-- Toast Notification -->
+  <div id="toastBox" class="fixed top-20 right-4 z-50 hidden max-w-sm px-4 py-3 rounded-xl shadow-xl border text-xs font-medium transition-all duration-200 bg-slate-900 text-white border-slate-700"></div>
+
+  <!-- ================= TOP HEADER & BRAND ================= -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-2">
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-3 min-w-0">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 flex-shrink-0 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-carnegie-600 flex items-center justify-center text-white shadow-md">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center space-x-2">
+              <h1 class="text-base sm:text-lg font-bold bg-gradient-to-r from-slate-900 via-purple-700 to-indigo-700 dark:from-white dark:via-purple-300 dark:to-indigo-300 bg-clip-text text-transparent truncate">
+                好書研究所 <span class="text-xs sm:text-sm font-semibold text-indigo-600 dark:text-indigo-400">by AJ Studio</span>
+              </h1>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300">
+                v4.0 財經實驗室版
+              </span>
+            </div>
+            <p id="headerSubtitle" class="text-[11px] text-slate-500 dark:text-slate-400 truncate">正在載入書庫模組...</p>
+          </div>
+        </div>
+
+        <!-- Controls: Cantonese Voice, Test Audio & Theme -->
+        <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+          <div class="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs">
+            <span class="flex h-2 w-2 relative">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="font-medium text-slate-600 dark:text-slate-300 hidden sm:inline">廣東話:</span>
+            <select id="voiceSelect" onchange="changeVoice(this.value)" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded px-1.5 py-0.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-purple-500 max-w-[120px] sm:max-w-[160px] truncate">
+              <option value="auto">自動廣東話 (zh-HK)</option>
+            </select>
+            <button onclick="testCantoneseVoice()" title="測試廣東話發音" class="px-2 py-0.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[11px] font-medium transition shadow-sm">
+              🔊 試音
+            </button>
+          </div>
+
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="切換深淺模式">
+            <svg id="themeMoon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h1m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg id="themeSun" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Top Navigation Tabs -->
+      <div class="flex items-center space-x-2 py-2 border-t border-slate-100 dark:border-slate-800/80 overflow-x-auto scrollbar-thin">
+        <button onclick="showLibraryShelf()" id="btnShowShelf" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-purple-600 text-white shadow-sm transition flex items-center space-x-1.5 flex-shrink-0">
+          <span>🏛️</span><span id="shelfTabLabel">好書書架總覽</span>
+        </button>
+        <button onclick="openActiveBookReader()" id="btnShowActiveBook" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center space-x-1.5 flex-shrink-0">
+          <span>📖</span><span id="activeBookTabLabel">正在精讀：《人性的弱點》</span>
+        </button>
+        <button onclick="showFinanceColumn()" id="btnShowFinance" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition flex items-center space-x-1.5 flex-shrink-0">
+          <span>📈</span><span>財經投資專欄 & 工具</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ================= VIEW 1: LIBRARY SHELF VIEW ================= -->
+    <div id="library-shelf-view" class="space-y-6">
+      <!-- Shelf Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 text-white p-6 sm:p-8 shadow-xl border border-indigo-800/50">
+        <div class="relative z-10 max-w-3xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold backdrop-blur border border-indigo-400/30">
+            <span>📚 世界經典名著典藏書架</span>
+            <span>•</span>
+            <span id="bannerStatsText">模組化書庫引擎已就緒</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">好書研究所 by AJ Studio・多書典藏與財經實驗室</h2>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            採用「一書一檔」獨立模組化架構，支援上百本名著流暢擴充！每章均附名著英文金句原聲與中文釋義、三層深度拆解（底層心理密碼、歷史名案、現代實踐）及全書總結，支援一行一行宏觀目錄瀏覽與純正廣東話續航朗讀。
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2 text-xs text-indigo-200">
+            <span id="badgeTotalBooksChapters" class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur">✅ 載入中...</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur">🏁 含每本書全書總結</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur">💬 金句中英雙語對照</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur">🔊 支援香港粵語 zh-HK</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shelf Filter, Search & View Toggle Bar -->
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <!-- Category Filters (Dynamic) -->
+          <div id="shelf-category-filters" class="flex items-center gap-1.5 overflow-x-auto scrollbar-thin pb-1 lg:pb-0">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Right Controls: View Toggle + Search -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <!-- Shelf View Toggle: Row List vs Card Grid -->
+            <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-700 p-0.5 flex-shrink-0 self-start sm:self-auto">
+              <button onclick="setShelfViewMode('list')" id="shelf-view-list-btn" class="px-3 py-1.5 text-xs font-semibold rounded-md transition shadow-sm bg-purple-600 text-white">
+                📋 宏觀目錄列表
+              </button>
+              <button onclick="setShelfViewMode('grid')" id="shelf-view-grid-btn" class="px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900">
+                🃏 卡片視圖
+              </button>
+            </div>
+
+            <!-- Shelf Search -->
+            <div class="relative w-full sm:w-64">
+              <input type="text" id="shelfSearchInput" oninput="renderLibraryShelf()" placeholder="搜尋書名、作者、關鍵字..." class="w-full text-xs px-3 py-2 pl-8 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-purple-500">
+              <svg class="w-4 h-4 absolute left-2.5 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Books Container (List Table OR Card Grid) -->
+      <div id="library-books-container">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ================= VIEW 2: DYNAMIC BOOK READER VIEW ================= -->
+    <div id="book-reader-view" class="hidden space-y-6">
+      <!-- Breadcrumb Bar -->
+      <div class="flex items-center justify-between bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/60 px-4 py-2.5 rounded-xl text-xs">
+        <button onclick="showLibraryShelf()" class="font-bold text-purple-700 dark:text-purple-300 hover:underline flex items-center space-x-1">
+          <span>← 返回好書書架總覽</span>
+        </button>
+        <span id="readerBreadcrumbInfo" class="text-slate-500 dark:text-slate-400 truncate">正在精讀</span>
+      </div>
+
+      <!-- Dynamic Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-purple-950 to-indigo-950 text-white p-6 sm:p-8 shadow-xl border border-purple-800/40">
+        <div class="relative z-10 max-w-4xl space-y-4">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-semibold backdrop-blur border border-purple-400/30">
+            <span id="heroBookBadge">完整精讀版</span>
+            <span>•</span>
+            <span id="heroBookAuthor">作者</span>
+          </div>
+
+          <h2 id="heroBookTitle" class="text-2xl sm:text-4xl font-extrabold tracking-tight">書名</h2>
+          <p id="heroBookSubtitle" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-serif italic">Subtitle</p>
+          <p id="heroBookSummary" class="text-xs sm:text-sm text-slate-200 leading-relaxed"></p>
+
+          <!-- Audio & Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button onclick="readCurrentBookSummary()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center space-x-2 shadow-lg transition">
+              <span>🔊</span><span>廣東話導讀全書精華</span>
+            </button>
+            <button onclick="startContinuousReading(1)" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold flex items-center space-x-2 shadow-lg transition">
+              <span>▶️</span><span>續航朗讀全書 (第1章起)</span>
+            </button>
+            <button onclick="jumpToConclusion()" class="px-4 py-2 rounded-xl bg-amber-500/90 hover:bg-amber-600 text-white text-xs font-bold flex items-center space-x-1.5 shadow-lg transition">
+              <span>🏁</span><span>直達全書總結</span>
+            </button>
+            <button onclick="scrollToChapters()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium backdrop-blur transition flex items-center space-x-1.5">
+              <span>📖</span><span>章節精讀區</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Part Cards in Hero -->
+        <div id="hero-parts-grid" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 relative z-10">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Reader Controls & Progress Bar -->
+      <div id="chapters-section" class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <!-- View Mode Toggle -->
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-medium text-slate-500">閱讀模式:</span>
+            <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-700 p-0.5">
+              <button onclick="setViewMode('reader')" id="mode-btn-reader" class="px-3 py-1.5 text-xs font-semibold rounded-md transition shadow-sm bg-purple-600 text-white">
+                📖 雙欄電子書精讀模式
+              </button>
+              <button onclick="setViewMode('list')" id="mode-btn-list" class="px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900">
+                📋 全景清單模式
+              </button>
+            </div>
+          </div>
+
+          <!-- Search in Active Book -->
+          <div class="relative w-full sm:w-72">
+            <input type="text" id="chapterSearch" oninput="handleSearch()" placeholder="搜尋本文章節、金句、名案..." class="w-full text-xs px-3 py-1.5 pl-8 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-purple-500">
+            <svg class="w-4 h-4 absolute left-2.5 top-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60">
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="text-slate-500 dark:text-slate-400">全書精讀掌握進度</span>
+            <span id="progressText" class="font-semibold text-purple-600 dark:text-purple-400">0 / 0 章 (0%)</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+            <div id="progressBarFill" class="h-full bg-gradient-to-r from-purple-500 to-emerald-500 transition-all duration-300" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= MODE A: DUAL COLUMN READER ================= -->
+      <div id="reader-mode-container" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Left Column: Chapter TOC -->
+        <aside class="lg:col-span-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden sticky top-24">
+          <div class="p-3.5 bg-slate-50 dark:bg-slate-850 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div class="flex items-center space-x-1.5 text-xs font-bold text-slate-700 dark:text-slate-200">
+              <span>📑</span><span id="readerTocTitle">全書目錄</span>
+            </div>
+            <select id="readerPartFilter" onchange="filterReaderToc(this.value)" class="text-[11px] bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded px-2 py-1 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-purple-500 max-w-[170px] truncate">
+            </select>
+          </div>
+
+          <div id="reader-toc-list" class="max-h-[580px] overflow-y-auto scrollbar-thin divide-y divide-slate-100 dark:divide-slate-700/60">
+          </div>
+        </aside>
+
+        <!-- Right Column: Reader Main Content -->
+        <article id="reader-main-pane" class="lg:col-span-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6 sm:p-8 space-y-6">
+        </article>
+      </div>
+
+      <!-- ================= MODE B: PANORAMIC CHAPTER LIST ================= -->
+      <div id="list-mode-container" class="hidden space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+          <div id="list-part-filter-buttons" class="flex flex-wrap items-center gap-1.5">
+          </div>
+          <div class="flex items-center space-x-2 text-xs">
+            <button onclick="expandAllList(true)" class="px-2.5 py-1 text-purple-700 dark:text-purple-300 hover:underline font-medium">展開全部內容</button>
+            <span class="text-slate-300 dark:text-slate-600">•</span>
+            <button onclick="expandAllList(false)" class="px-2.5 py-1 text-slate-500 hover:underline font-medium">全部收起</button>
+          </div>
+        </div>
+
+        <div id="chapter-list-container" class="space-y-4">
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 3: FINANCE COLUMN & INVESTMENT LAB ================= -->
+    <div id="finance-column-view" class="hidden space-y-6">
+      <!-- Finance Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 text-white p-6 sm:p-8 shadow-xl border border-emerald-800/50">
+        <div class="relative z-10 max-w-4xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold backdrop-blur border border-emerald-400/30">
+            <span>📈 AJ Studio 財經投資專欄</span>
+            <span>•</span>
+            <span>香港市場實戰工具 × 名著財商理論</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">好書研究所 by AJ Studio・香港投資工具與財商實驗室</h2>
+          <p class="text-sm text-slate-200 leading-relaxed">
+            將《波浪理論》、《聰明的投資者》、《反脆弱》、《掌握市場週期》與《富爸爸，窮爸爸》等名著智慧，轉化為香港人用得著嘅實戰投資模擬器與市場數據拆解（涵蓋 2800 盈富、3110/3070 高息 ETF、3416 備兌期權 ETF、傳統高息藍籌及恒指 P/E 歷史估值）。
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2">
+            <a href="#finance-lab-section" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-bold transition shadow-lg">🧮 互動投資小程式 (5大工具)</a>
+            <a href="#finance-articles-section" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold backdrop-blur transition">📰 權威專欄導讀 (6大主題)</a>
+          </div>
+          <p id="financeDisclaimer" class="text-[11px] text-emerald-200/80 pt-1"></p>
+        </div>
+      </div>
+
+      <!-- PART A: 4 INTERACTIVE INVESTMENT TOOLS -->
+      <section id="finance-lab-section" class="space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white flex items-center space-x-2">
+            <span>🧮</span><span>香港實戰投資理財小程式</span>
+          </h3>
+          <span class="text-xs text-slate-500 dark:text-slate-400">即時試算・改動數字即刻更新結果</span>
+        </div>
+
+        <!-- Tool 1 & Tool 2 Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <!-- TOOL 1: Multi-Instrument Compound Return Calculator -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 sm:p-6 shadow-sm space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300">工具 1</span>
+                <h4 class="text-base font-bold text-slate-900 dark:text-white mt-1">💰 資金投入唔同香港工具・多年回報大對比</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">輸入現有本金與每月儲蓄，比較定期、2800、高息股、3110、3416 與科指長遠差距。</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/70">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">現有本金 (HK$)</label>
+                <input id="fin1Capital" type="number" min="0" step="10000" value="300000" oninput="calcTool1()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">每月加碼儲蓄 (HK$)</label>
+                <input id="fin1Monthly" type="number" min="0" step="500" value="8000" oninput="calcTool1()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">投資年期: <span id="fin1YearsLabel" class="text-emerald-600 dark:text-emerald-400 font-bold">15 年</span></label>
+                <input id="fin1Years" type="range" min="1" max="30" value="15" oninput="calcTool1()" class="w-full accent-emerald-600 mt-1.5">
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs">
+              <label class="inline-flex items-center space-x-2 cursor-pointer select-none">
+                <input id="fin1Drip" type="checkbox" checked onchange="calcTool1()" class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="font-medium text-slate-700 dark:text-slate-200">股息自動再投資 (複利滾雪球 DRIP)</span>
+              </label>
+              <span id="fin1PrincipalSummary" class="text-[11px] font-semibold text-slate-500"></span>
+            </div>
+
+            <div id="fin1Results" class="space-y-2.5"></div>
+          </div>
+
+          <!-- TOOL 2: Custom Portfolio Allocation Simulator -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 sm:p-6 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300">工具 2</span>
+                <h4 class="text-base font-bold text-slate-900 dark:text-white mt-1">⚖️ 自由比例資產分配模擬器（我有 $X 萬點分配？）</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">自訂 5 類香港工具配置比例或套用預設組合，即時計算組合年化回報與被動現金流。</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="applyPresetPortfolio('conservative')" class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold hover:bg-emerald-100">🛡️ 保守收息型</button>
+              <button onclick="applyPresetPortfolio('balanced')" class="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 text-[11px] font-semibold hover:bg-purple-100">⚖️ 攻守平衡型</button>
+              <button onclick="applyPresetPortfolio('growth')" class="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 text-[11px] font-semibold hover:bg-sky-100">🚀 進取增長型</button>
+              <button onclick="normalizePortfolio()" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-semibold hover:bg-slate-200">🔄 自動平衡至 100%</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700/70">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">總投資金額 (HK$)</label>
+                <input id="fin2Capital" type="number" min="0" step="10000" value="500000" oninput="calcTool2()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">每月額外投入 (HK$)</label>
+                <input id="fin2Monthly" type="number" min="0" step="500" value="5000" oninput="calcTool2()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">年期: <span id="fin2YearsLabel" class="text-purple-600 dark:text-purple-400 font-bold">10 年</span></label>
+                <input id="fin2Years" type="range" min="1" max="30" value="10" oninput="calcTool2()" class="w-full accent-purple-600 mt-1.5">
+              </div>
+            </div>
+
+            <div id="fin2Sliders" class="space-y-2 text-xs"></div>
+
+            <div id="fin2Summary" class="p-4 rounded-xl bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/40 dark:to-indigo-950/40 border border-purple-200 dark:border-purple-800/60 space-y-2"></div>
+          </div>
+        </div>
+
+        <!-- Tool 3 & Tool 4 Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <!-- TOOL 3: HSI P/E & Moving Average Valuation Thermometer -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 sm:p-6 shadow-sm space-y-4">
+            <div>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-300">工具 3</span>
+              <h4 class="text-base font-bold text-slate-900 dark:text-white mt-1">🌡️ 恒指市盈率 (P/E) 與歷史均線估值定位儀</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">以過去 20–30 年恒指 P/E 均值（~11.5x–14.1x）及 250 天牛熊線重疊校準，判斷今日屬於平定貴。</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/70">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">今日恒指 P/E: <span id="fin3PELabel" class="text-rose-600 font-bold">11.16x</span></label>
+                <input id="fin3PE" type="range" min="6.5" max="22.0" step="0.1" value="11.16" oninput="calcTool3()" class="w-full accent-rose-600 mt-1.5">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">偏離 MA250 年線 (%)</label>
+                <input id="fin3MA250" type="number" step="0.5" value="2.5" oninput="calcTool3()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">10年美債息率 (%)</label>
+                <input id="fin3Bond" type="number" step="0.1" value="4.3" oninput="calcTool3()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+            </div>
+
+            <div id="fin3Output" class="space-y-3"></div>
+          </div>
+
+          <!-- TOOL 4: Rich Dad vs Poor Dad 10-20 Year Simulator -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 sm:p-6 shadow-sm space-y-4">
+            <div>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300">工具 4</span>
+              <h4 class="text-base font-bold text-slate-900 dark:text-white mt-1">🏠 《富爸爸，窮爸爸》十年／二十年財務命運對比模擬器</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">同一個起點與月薪，對比「買入消費負債」vs「優先買入生息資產」幾年後出現財務自由交叉點！</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 bg-slate-50 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/70">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">月薪收入 (HK$)</label>
+                <input id="fin4Income" type="number" min="0" step="1000" value="38000" oninput="calcTool4()" class="w-full text-xs px-2 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">基本生活開支 (HK$)</label>
+                <input id="fin4Expense" type="number" min="0" step="1000" value="22000" oninput="calcTool4()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">窮爸爸每月負債消費</label>
+                <input id="fin4PoorDebt" type="number" min="0" step="500" value="8000" oninput="calcTool4()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">富爸爸盈餘投資比例(%)</label>
+                <input id="fin4RichPct" type="number" min="10" max="100" step="5" value="80" oninput="calcTool4()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">資產年化回報 (%)</label>
+                <input id="fin4Return" type="number" min="1" max="20" step="0.5" value="7.5" oninput="calcTool4()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">模擬年期: <span id="fin4YearsLabel" class="text-amber-600 font-bold">15 年</span></label>
+                <input id="fin4Years" type="range" min="5" max="30" step="1" value="15" oninput="calcTool4()" class="w-full accent-amber-600 mt-1.5">
+              </div>
+            </div>
+
+            <div id="fin4Output" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <!-- TOOL 5: 1M HKD in 0941.HK + Annual Dividend Reinvested into HK High-Dividend ETF -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-emerald-200 dark:border-emerald-800/70 p-5 sm:p-6 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-800 dark:bg-teal-900/60 dark:text-teal-300">工具 5 • 雙引擎收息雪球</span>
+              <h4 class="text-base font-bold text-slate-900 dark:text-white mt-1">💎 100萬買入 0941 中國移動 ＋ 每年股息再投資「香港高息 ETF」雪球模擬器</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">以一筆過資金買入高息藍籌底倉 (0941.HK)，每年將收到嘅股息自動投入香港高息 ETF（3110 / 3070 / 3416）滾存複利，模擬 5–25 年後總資產與被動月入變化。</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 bg-slate-50 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/70">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">0941 初始本金 (HK$)</label>
+              <input id="fin5Cap" type="number" min="10000" step="50000" value="1000000" oninput="calcTool5()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">0941 年股息率 (%)</label>
+              <input id="fin5Yield941" type="number" min="1" max="15" step="0.1" value="6.7" oninput="calcTool5()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">0941 股價年增長 (%)</label>
+              <input id="fin5Growth941" type="number" min="-5" max="15" step="0.5" value="2.5" oninput="calcTool5()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">股息再投資高息 ETF</label>
+              <select id="fin5EtfSelect" onchange="onTool5EtfChange()" class="w-full text-xs px-2 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-semibold">
+                <option value="7.5|6.0" selected>3110.HK 恒生高息 (總7.5% / 息6.0%)</option>
+                <option value="7.2|5.8">3070.HK 平安高息 (總7.2% / 息5.8%)</option>
+                <option value="10.5|14.0">3416.HK 國指備兌 (總10.5% / 息14%)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">滾存年期: <span id="fin5YearsLabel" class="text-teal-600 dark:text-teal-400 font-bold">10 年</span></label>
+              <input id="fin5Years" type="range" min="3" max="25" step="1" value="10" oninput="calcTool5()" class="w-full accent-teal-600 mt-1.5">
+            </div>
+          </div>
+
+          <div id="fin5Output" class="space-y-3"></div>
+        </div>
+
+      </section>
+
+      <!-- PART B: 6 AUTHORITATIVE FINANCE COLUMN ARTICLES -->
+      <section id="finance-articles-section" class="space-y-4 pt-2">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white flex items-center space-x-2">
+            <span>📰</span><span>權威財經專欄・名著與香港市場實戰拆解</span>
+          </h3>
+          <span class="text-xs text-slate-500 dark:text-slate-400">每篇均附權威出處與廣東話語音導讀</span>
+        </div>
+        <div id="finance-articles-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-5"></div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ================= FOOTER (TRIPLE VERSION VERIFICATION) ================= -->
+  <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>好書研究所 by AJ Studio • 世界經典名著精讀與財經投資實驗室（模組化公開版）</div>
+      <div class="flex items-center space-x-3">
+        <span class="footer-version" style="font-size:0.75rem; color:#86868b;">Version: v4.0 (Build 20261113)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= FLOATING AUDIO DOCK ================= -->
+  <div id="audioDock" class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-2xl px-4 py-3 transition-transform duration-300">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-3 w-full sm:w-auto min-w-0">
+        <div id="audioStatusBadge" class="w-9 h-9 flex-shrink-0 rounded-xl bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-300 flex items-center justify-center font-bold text-sm">
+          <span id="audioStatusIcon">🎧</span>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center space-x-2">
+            <span id="audioTrackTitle" class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
+              點擊章節「🔊 廣東話導讀」或「▶️ 續航朗讀」即時播放
+            </span>
+            <span id="audioLangBadge" class="flex-shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300">
+              zh-HK 廣東話
+            </span>
+          </div>
+          <p id="audioSubStatus" class="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+            Web Speech 引擎就緒 • 支援長文本標點切片與 9 秒 Heartbeat 保活
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
+        <div class="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-lg text-xs">
+          <span class="text-slate-500 dark:text-slate-400">語速:</span>
+          <select id="speedSelect" onchange="changeSpeed(this.value)" class="bg-transparent font-medium text-slate-800 dark:text-slate-200 focus:outline-none">
+            <option value="0.8">0.8x 慢速</option>
+            <option value="1.0" selected>1.0x 標準</option>
+            <option value="1.2">1.2x 稍快</option>
+            <option value="1.5">1.5x 倍速</option>
+          </select>
+        </div>
+
+        <button id="btnPause" onclick="togglePauseSpeech()" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold flex items-center space-x-1 transition">
+          <span id="btnPauseIcon">⏸️</span>
+          <span id="btnPauseText">暫停</span>
+        </button>
+
+        <button onclick="stopSpeech()" class="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 hover:bg-rose-100 text-xs font-semibold flex items-center space-x-1 transition">
+          <span>⏹️</span>
+          <span>停止</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODULAR BOOK REGISTRY & LOADER ================= -->
+  <script>
+    window.BOOK_LIBRARY = [];
+    window.registerBook = function(bookObj) {
+      if (!bookObj || !bookObj.id) return;
+      window.BOOK_LIBRARY.push(bookObj);
+    };
+  </script>
+  <script src="books/manifest.js?v=1.7"></script>
+  <script src="finance/finance_data.js?v=1.7"></script>
+  <script>
+    if (Array.isArray(window.BOOK_MANIFEST)) {
+      window.BOOK_MANIFEST.forEach(function(file) {
+        document.write('<script src="books/' + file + '?v=1.6"><\/script>');
+      });
+    }
+  </script>
+
+  <!-- ================= MAIN APPLICATION LOGIC ================= -->
+  <script>
+    console.log("%c Project Version %c v4.0 [2026-11-13] ", "background:#ff6b00;color:#fff;padding:2px 6px;border-radius:3px 0 0 3px;", "background:#1d1d1f;color:#00f2fe;padding:2px 6px;border-radius:0 3px 3px 0;");
+
+    const libraryBooks = window.BOOK_LIBRARY || [];
+
+    // App State
+    let activeBook = libraryBooks[0] || null;
+    let chapters = activeBook ? activeBook.chapters : [];
+    let currentViewMode = 'reader'; // 'reader' | 'list'
+    let shelfViewMode = 'list';     // 'list' | 'grid' (default: line-by-line macro directory)
+    let activeChapterNum = 1;       // 1..N or 'conclusion'
+    let currentPartFilter = 0;
+    let listExpandedSet = new Set();
+    let shelfCategory = 'all';
+
+    // Safe Storage
+    function safeGetStorage(key, fallback) {
+      try {
+        const val = localStorage.getItem(key);
+        return val !== null ? val : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+    function safeSetStorage(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+
+    function getMasteredKey(bookId) {
+      return 'mastered_' + (bookId || (activeBook ? activeBook.id : 'default')) + '_v1';
+    }
+    function getMasteredSet(bookId) {
+      return new Set(JSON.parse(safeGetStorage(getMasteredKey(bookId), '[]')));
+    }
+    function saveMasteredSet(s, bookId) {
+      safeSetStorage(getMasteredKey(bookId), JSON.stringify(Array.from(s)));
+    }
+
+    function showToast(msg, isError = false) {
+      const box = document.getElementById('toastBox');
+      if (!box) return;
+      box.textContent = msg;
+      box.className = isError
+        ? 'fixed top-20 right-4 z-50 max-w-sm px-4 py-3 rounded-xl shadow-xl border text-xs font-medium bg-rose-900 text-rose-100 border-rose-700'
+        : 'fixed top-20 right-4 z-50 max-w-sm px-4 py-3 rounded-xl shadow-xl border text-xs font-medium bg-slate-900 text-white border-slate-700';
+      box.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => box.classList.add('hidden'), 3200);
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    // ================= STRICT CANTONESE & ENGLISH SPEECH ENGINE (5 PILLARS) =================
+    let availableVoices = [];
+    let currentVoice = null;
+    let currentRate = 1.0;
+    let speechQueue = [];
+    let currentQueueIndex = 0;
+    let isSpeaking = false;
+    let isPaused = false;
+    let heartbeatTimer = null;
+    let continuousChapterQueue = [];
+
+    function initSpeechVoices() {
+      if (!('speechSynthesis' in window)) return;
+      availableVoices = window.speechSynthesis.getVoices();
+      const select = document.getElementById('voiceSelect');
+      if (!select) return;
+      select.innerHTML = '';
+
+      const cantoneseVoices = [];
+      availableVoices.forEach((v, idx) => {
+        const lang = (v.lang || '').toLowerCase().replace('_', '-');
+        const name = (v.name || '').toLowerCase();
+        if (lang === 'zh-hk' || lang === 'yue-hk' || lang === 'zh-yue' || lang.startsWith('yue') ||
+            name.includes('cantonese') || name.includes('hong kong') || name.includes('廣東話') ||
+            name.includes('粵語') || name.includes('香港') || name.includes('sin-ji') ||
+            name.includes('hiumiu') || name.includes('tracy') || name.includes('danny') ||
+            name.includes('hiugaai') || name.includes('wanlung')) {
+          cantoneseVoices.push({ voice: v, index: idx });
+        }
+      });
+
+      const autoOpt = document.createElement('option');
+      autoOpt.value = 'auto';
+      autoOpt.textContent = cantoneseVoices.length > 0 ? '🌟 自動最佳廣東話 (zh-HK)' : '🌟 系統廣東話 (zh-HK)';
+      select.appendChild(autoOpt);
+
+      if (cantoneseVoices.length > 0) {
+        const group = document.createElement('optgroup');
+        group.label = '🇭🇰 香港廣東話語音 (zh-HK)';
+        cantoneseVoices.forEach(cv => {
+          const opt = document.createElement('option');
+          opt.value = cv.index;
+          opt.textContent = `${cv.voice.name} (${cv.voice.lang})`;
+          group.appendChild(opt);
+        });
+        select.appendChild(group);
+      }
+      currentVoice = getBestCantoneseVoice();
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = initSpeechVoices;
+      initSpeechVoices();
+    }
+
+    function changeVoice(val) {
+      if (val === 'auto') {
+        currentVoice = getBestCantoneseVoice();
+      } else {
+        const idx = parseInt(val, 10);
+        if (!isNaN(idx) && availableVoices[idx]) {
+          currentVoice = availableVoices[idx];
+        }
+      }
+      showToast(`語音切換: ${currentVoice ? currentVoice.name : '自動偵測'}`);
+    }
+
+    function changeSpeed(val) {
+      currentRate = parseFloat(val) || 1.0;
+      if (isSpeaking && !isPaused) {
+        const remaining = speechQueue.slice(currentQueueIndex);
+        const lang = window.__lastSpeechLang || 'zh-HK';
+        const title = window.__lastSpeechTitle || '導讀';
+        const cb = window.__lastSpeechCallback || null;
+        cancelSpeechOnly();
+        playSpeechQueue(remaining, lang, title, cb);
+      }
+    }
+
+    function getBestCantoneseVoice() {
+      const voices = availableVoices.length > 0 ? availableVoices : (('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : []);
+      const exactZhHK = voices.find(v => {
+        const l = (v.lang || '').toLowerCase().replace('_', '-');
+        return l === 'zh-hk' || l === 'yue-hk' || l === 'zh-yue';
+      });
+      if (exactZhHK) return exactZhHK;
+      const namedCanto = voices.find(v => {
+        const n = (v.name || '').toLowerCase();
+        return n.includes('cantonese') || n.includes('廣東話') || n.includes('粵語') || n.includes('sin-ji') || n.includes('hiumiu');
+      });
+      return namedCanto || null;
+    }
+
+    function getBestEnglishVoice() {
+      const voices = availableVoices.length > 0 ? availableVoices : (('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : []);
+      const usVoice = voices.find(v => (v.lang || '').toLowerCase().replace('_', '-') === 'en-us');
+      if (usVoice) return usVoice;
+      const gbVoice = voices.find(v => (v.lang || '').toLowerCase().replace('_', '-') === 'en-gb');
+      if (gbVoice) return gbVoice;
+      return voices.find(v => (v.lang || '').toLowerCase().startsWith('en')) || null;
+    }
+
+    function chunkText(text) {
+      if (!text) return [];
+      const clean = text.replace(/\*\*/g, '').replace(/[#\[\]`_]/g, ' ').trim();
+      const raw = clean.split(/([。！？\n；;!?]+|\.\s+)/);
+      const chunks = [];
+      let temp = '';
+      for (let i = 0; i < raw.length; i++) {
+        const part = raw[i];
+        if (!part) continue;
+        if (part.match(/^[。！？\n；;!?]+$/) || part.match(/^\.\s+$/)) {
+          temp += part;
+          if (temp.trim().length > 0) {
+            chunks.push(temp.trim());
+            temp = '';
+          }
+        } else {
+          if (temp.length + part.length > 90) {
+            if (temp.trim().length > 0) chunks.push(temp.trim());
+            temp = part;
+          } else {
+            temp += part;
+          }
+        }
+      }
+      if (temp.trim().length > 0) chunks.push(temp.trim());
+      return chunks.filter(c => c.length > 0);
+    }
+
+    function playSpeechQueue(chunks, lang = 'zh-HK', title = '導讀', onFinishedCallback = null) {
+      cancelSpeechOnly();
+      if (!('speechSynthesis' in window)) {
+        showToast('此瀏覽器不支援 Web Speech API 語音朗讀', true);
+        return;
+      }
+      if (!chunks || chunks.length === 0) return;
+
+      speechQueue = chunks;
+      currentQueueIndex = 0;
+      isSpeaking = true;
+      isPaused = false;
+      window.__lastSpeechLang = lang;
+      window.__lastSpeechTitle = title;
+      window.__lastSpeechCallback = onFinishedCallback;
+
+      document.getElementById('audioTrackTitle').textContent = title;
+      document.getElementById('audioLangBadge').textContent = lang === 'en-US' ? 'en-US 英語原聲' : 'zh-HK 廣東話';
+      document.getElementById('audioStatusIcon').textContent = '🔊';
+      document.getElementById('btnPauseIcon').textContent = '⏸️';
+      document.getElementById('btnPauseText').textContent = '暫停';
+
+      clearInterval(heartbeatTimer);
+      heartbeatTimer = setInterval(() => {
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 9000);
+
+      speakNextChunk();
+    }
+
+    function speakNextChunk() {
+      if (!isSpeaking) return;
+      if (currentQueueIndex >= speechQueue.length) {
+        finishSpeech();
+        if (window.__lastSpeechCallback) {
+          const cb = window.__lastSpeechCallback;
+          window.__lastSpeechCallback = null;
+          cb();
+        }
+        return;
+      }
+
+      const chunk = speechQueue[currentQueueIndex];
+      const utter = new SpeechSynthesisUtterance(chunk);
+      utter.rate = currentRate;
+
+      const isEnglish = window.__lastSpeechLang === 'en-US';
+      if (isEnglish) {
+        utter.lang = 'en-US';
+        const enV = getBestEnglishVoice();
+        if (enV) utter.voice = enV;
+      } else {
+        utter.lang = 'zh-HK';
+        if (currentVoice) utter.voice = currentVoice;
+      }
+
+      window.__activeSpeechUtterance = utter;
+
+      utter.onend = () => {
+        window.__activeSpeechUtterance = null;
+        currentQueueIndex++;
+        speakNextChunk();
+      };
+      utter.onerror = (e) => {
+        window.__activeSpeechUtterance = null;
+        if (e.error !== 'canceled' && e.error !== 'interrupted') {
+          currentQueueIndex++;
+          speakNextChunk();
+        }
+      };
+
+      document.getElementById('audioSubStatus').textContent =
+        `進度: ${currentQueueIndex + 1} / ${speechQueue.length} 句 ・ 「${chunk.substring(0, 24)}...」`;
+
+      window.speechSynthesis.speak(utter);
+    }
+
+    function cancelSpeechOnly() {
+      clearInterval(heartbeatTimer);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      window.__activeSpeechUtterance = null;
+      isSpeaking = false;
+      isPaused = false;
+    }
+
+    function togglePauseSpeech() {
+      if (!('speechSynthesis' in window) || !isSpeaking) return;
+      if (isPaused) {
+        window.speechSynthesis.resume();
+        isPaused = false;
+        document.getElementById('btnPauseIcon').textContent = '⏸️';
+        document.getElementById('btnPauseText').textContent = '暫停';
+        document.getElementById('audioStatusIcon').textContent = '🔊';
+      } else {
+        window.speechSynthesis.pause();
+        isPaused = true;
+        document.getElementById('btnPauseIcon').textContent = '▶️';
+        document.getElementById('btnPauseText').textContent = '繼續';
+        document.getElementById('audioStatusIcon').textContent = '⏸️';
+      }
+    }
+
+    function stopSpeech() {
+      continuousChapterQueue = [];
+      cancelSpeechOnly();
+      document.getElementById('audioTrackTitle').textContent = '播放已停止';
+      document.getElementById('audioSubStatus').textContent = '可隨時點擊任一章節重新開始朗讀';
+      document.getElementById('audioStatusIcon').textContent = '🎧';
+      document.getElementById('btnPauseIcon').textContent = '⏸️';
+      document.getElementById('btnPauseText').textContent = '暫停';
+    }
+
+    function finishSpeech() {
+      clearInterval(heartbeatTimer);
+      isSpeaking = false;
+      isPaused = false;
+      document.getElementById('audioStatusIcon').textContent = '✅';
+      document.getElementById('audioSubStatus').textContent = '本段導讀已圓滿播畢';
+    }
+
+    function testCantoneseVoice() {
+      const testSentence = '你好！好書研究所模組化語音引擎已就緒，正使用純正香港廣東話為你導讀世界經典名著。';
+      playSpeechQueue(chunkText(testSentence), 'zh-HK', '廣東話語音測試');
+    }
+
+    function speakEnglishQuote(quote, chapNum) {
+      continuousChapterQueue = [];
+      playSpeechQueue(chunkText(quote), 'en-US', `第 ${chapNum} 章 英文原聲金句`);
+    }
+
+    function buildChapterSpeechChunks(chap) {
+      const script = [
+        `第${chap.num}章，${chap.title_zh}。`,
+        `核心原則：${chap.principle_zh}。`,
+        chap.quote_zh ? `金句中文釋義：${chap.quote_zh}` : '',
+        `第一層，底層人性心理密碼：${chap.layer1_psychology}`,
+        `第二層，經典名案解析：${chap.layer2_anecdote}`,
+        `第三層，現代生活實踐步驟：${chap.layer3_action}`
+      ].filter(Boolean);
+      const chunks = [];
+      script.forEach(s => chunks.push(...chunkText(s)));
+      return chunks;
+    }
+
+    function readChapterCantonese(num) {
+      continuousChapterQueue = [];
+      const chap = chapters.find(c => c.num === num);
+      if (!chap) return;
+      playSpeechQueue(buildChapterSpeechChunks(chap), 'zh-HK', `《${activeBook.title}》第 ${chap.num} 章: ${chap.title_zh}`);
+    }
+
+    function readBookConclusionCantonese() {
+      continuousChapterQueue = [];
+      if (!activeBook || !activeBook.conclusion) return;
+      const con = activeBook.conclusion;
+      const script = [
+        `《${activeBook.title}》${con.title}。`,
+        `核心一句話總結：${con.core_takeaway}`,
+        `全書精華回顧：${con.key_pillars.join(' ')}`,
+        `實踐行動建議：${con.action_plan}`
+      ];
+      const chunks = [];
+      script.forEach(s => chunks.push(...chunkText(s)));
+      playSpeechQueue(chunks, 'zh-HK', `《${activeBook.title}》全書總結導讀`);
+    }
+
+    function startContinuousReading(startNum = 1) {
+      continuousChapterQueue = chapters.filter(c => c.num >= startNum).map(c => c.num);
+      playNextContinuousChapter();
+    }
+
+    function playNextContinuousChapter() {
+      if (continuousChapterQueue.length === 0) {
+        if (activeBook && activeBook.conclusion) {
+          if (currentViewMode === 'reader') selectReaderConclusion(false);
+          readBookConclusionCantonese();
+          return;
+        }
+        document.getElementById('audioStatusIcon').textContent = '🏆';
+        document.getElementById('audioSubStatus').textContent = `《${activeBook.title}》全書續航朗讀圓滿完成！`;
+        return;
+      }
+      const nextNum = continuousChapterQueue.shift();
+      const chap = chapters.find(c => c.num === nextNum);
+      if (!chap) return;
+      if (currentViewMode === 'reader') {
+        selectReaderChapter(nextNum, false);
+      }
+      playSpeechQueue(
+        buildChapterSpeechChunks(chap),
+        'zh-HK',
+        `[續航] 《${activeBook.title}》第 ${chap.num}/${chapters.length} 章: ${chap.title_zh}`,
+        () => playNextContinuousChapter()
+      );
+    }
+
+    function readCurrentBookSummary() {
+      continuousChapterQueue = [];
+      if (!activeBook) return;
+      let text = `${activeBook.author}經典名著《${activeBook.title}》全書精華導讀。${activeBook.summary}本書共收錄 ${chapters.length} 個核心章節。`;
+      activeBook.parts.forEach(p => {
+        text += `${p.title}，${p.desc}。`;
+      });
+      playSpeechQueue(chunkText(text), 'zh-HK', `《${activeBook.title}》宏觀全書精華導讀`);
+    }
+
+    // ================= PROGRESS & MASTERY =================
+    function updateProgressUI() {
+      if (!activeBook) return;
+      const mastered = getMasteredSet(activeBook.id);
+      const count = mastered.size;
+      const total = chapters.length;
+      const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+      document.getElementById('progressText').textContent = `${count} / ${total} 章 (${pct}%)`;
+      document.getElementById('progressBarFill').style.width = `${pct}%`;
+    }
+
+    function toggleMastered(num) {
+      const mastered = getMasteredSet(activeBook.id);
+      if (mastered.has(num)) {
+        mastered.delete(num);
+        showToast(`已取消第 ${num} 章的掌握標記`);
+      } else {
+        mastered.add(num);
+        showToast(`🎉 恭喜！已標記掌握第 ${num} 章`);
+      }
+      saveMasteredSet(mastered, activeBook.id);
+      updateProgressUI();
+      if (currentViewMode === 'reader') {
+        renderReaderToc();
+        renderReaderPane(activeChapterNum);
+      } else {
+        renderChaptersList(getFilteredChapters());
+      }
+    }
+
+    // ================= READER MODE TOGGLE =================
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const btnReader = document.getElementById('mode-btn-reader');
+      const btnList = document.getElementById('mode-btn-list');
+      const readerBox = document.getElementById('reader-mode-container');
+      const listBox = document.getElementById('list-mode-container');
+
+      if (mode === 'reader') {
+        btnReader.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition shadow-sm bg-purple-600 text-white';
+        btnList.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900';
+        readerBox.classList.remove('hidden');
+        listBox.classList.add('hidden');
+        renderReaderToc();
+        renderReaderPane(activeChapterNum);
+      } else {
+        btnList.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition shadow-sm bg-purple-600 text-white';
+        btnReader.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900';
+        listBox.classList.remove('hidden');
+        readerBox.classList.add('hidden');
+        renderChaptersList(getFilteredChapters());
+      }
+    }
+
+    // ================= FILTER & SEARCH =================
+    function getFilteredChapters() {
+      const q = (document.getElementById('chapterSearch')?.value || '').trim().toLowerCase();
+      return chapters.filter(c => {
+        const matchPart = currentPartFilter === 0 || c.part === currentPartFilter;
+        if (!matchPart) return false;
+        if (!q) return true;
+        return (c.title_zh && c.title_zh.toLowerCase().includes(q)) ||
+               (c.title_en && c.title_en.toLowerCase().includes(q)) ||
+               (c.principle_zh && c.principle_zh.toLowerCase().includes(q)) ||
+               (c.quote && c.quote.toLowerCase().includes(q)) ||
+               (c.quote_zh && c.quote_zh.toLowerCase().includes(q)) ||
+               (c.layer1_psychology && c.layer1_psychology.toLowerCase().includes(q)) ||
+               (c.layer2_anecdote && c.layer2_anecdote.toLowerCase().includes(q)) ||
+               (c.layer3_action && c.layer3_action.toLowerCase().includes(q));
+      });
+    }
+
+    function handleSearch() {
+      if (currentViewMode === 'reader') {
+        renderReaderToc();
+        const filtered = getFilteredChapters();
+        if (filtered.length > 0 && activeChapterNum !== 'conclusion' && !filtered.some(c => c.num === activeChapterNum)) {
+          selectReaderChapter(filtered[0].num, false);
+        }
+      } else {
+        renderChaptersList(getFilteredChapters());
+      }
+    }
+
+    function jumpToPart(partNum) {
+      currentPartFilter = partNum;
+      const sel = document.getElementById('readerPartFilter');
+      if (sel) sel.value = String(partNum);
+      const firstInPart = chapters.find(c => c.part === partNum);
+      if (firstInPart) activeChapterNum = firstInPart.num;
+      if (currentViewMode === 'reader') {
+        renderReaderToc();
+        renderReaderPane(activeChapterNum);
+      } else {
+        filterByPart(partNum);
+      }
+      scrollToChapters();
+    }
+
+    function jumpToConclusion() {
+      if (currentViewMode === 'reader') {
+        selectReaderConclusion(true);
+      } else {
+        const el = document.getElementById('panoramic-conclusion-card');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function filterReaderToc(val) {
+      currentPartFilter = parseInt(val, 10) || 0;
+      renderReaderToc();
+      const filtered = getFilteredChapters();
+      if (filtered.length > 0 && activeChapterNum !== 'conclusion' && !filtered.some(c => c.num === activeChapterNum)) {
+        selectReaderChapter(filtered[0].num, false);
+      }
+    }
+
+    // ================= DUAL COLUMN READER RENDERING =================
+    function renderReaderToc() {
+      const toc = document.getElementById('reader-toc-list');
+      if (!toc) return;
+      const list = getFilteredChapters();
+      const mastered = getMasteredSet(activeBook.id);
+
+      let html = '';
+      if (list.length === 0) {
+        html = '<div class="p-6 text-center text-xs text-slate-400">無符合搜尋條件的章節</div>';
+      } else {
+        html = list.map(c => {
+          const isActive = c.num === activeChapterNum;
+          const isDone = mastered.has(c.num);
+          return `
+            <button onclick="selectReaderChapter(${c.num}, false)" class="w-full text-left px-3.5 py-2.5 flex items-start justify-between gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition ${isActive ? 'toc-item-active' : ''}">
+              <div class="min-w-0">
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[11px] font-bold text-purple-600 dark:text-purple-400">第 ${c.num} 章</span>
+                  <span class="text-[10px] text-slate-400 truncate">${c.part_title.split('：')[0]}</span>
+                </div>
+                <div class="text-xs font-medium text-slate-800 dark:text-slate-100 truncate mt-0.5">${c.title_zh}</div>
+              </div>
+              <span class="flex-shrink-0 text-xs mt-0.5" title="${isDone ? '已掌握' : '未標記'}">${isDone ? '✅' : '○'}</span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      if (activeBook && activeBook.conclusion) {
+        const isConActive = activeChapterNum === 'conclusion';
+        html += `
+          <button onclick="selectReaderConclusion(false)" class="w-full text-left px-3.5 py-3 flex items-center justify-between gap-2 bg-amber-50/60 dark:bg-amber-950/20 hover:bg-amber-100/70 dark:hover:bg-amber-900/30 transition border-t-2 border-amber-200 dark:border-amber-800/60 ${isConActive ? 'toc-item-active' : ''}">
+            <div class="min-w-0">
+              <div class="text-[11px] font-bold text-amber-700 dark:text-amber-400">🏁 全書總結</div>
+              <div class="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate mt-0.5">${activeBook.conclusion.title.replace('全書總結：', '')}</div>
+            </div>
+            <span class="flex-shrink-0 text-xs">✨</span>
+          </button>
+        `;
+      }
+
+      toc.innerHTML = html;
+    }
+
+    function selectReaderChapter(num, doScroll = true) {
+      activeChapterNum = num;
+      renderReaderToc();
+      renderReaderPane(num);
+      if (doScroll) {
+        const pane = document.getElementById('reader-main-pane');
+        if (pane) pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function selectReaderConclusion(doScroll = true) {
+      activeChapterNum = 'conclusion';
+      renderReaderToc();
+      renderReaderPane('conclusion');
+      if (doScroll) {
+        const pane = document.getElementById('reader-main-pane');
+        if (pane) pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function renderReaderPane(target) {
+      const pane = document.getElementById('reader-main-pane');
+      if (!pane || !activeBook) return;
+
+      if (target === 'conclusion') {
+        const con = activeBook.conclusion;
+        if (!con) return;
+        pane.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-amber-200 dark:border-amber-800/60 pb-5">
+            <div class="space-y-1.5">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 text-xs font-bold">🏁 全書總結・核心昇華</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1">${con.title}</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">《${activeBook.title}》・ ${activeBook.author}</p>
+            </div>
+            <button onclick="readBookConclusionCantonese()" class="flex-shrink-0 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-sm transition">
+              <span>🔊</span><span>廣東話朗讀全書總結</span>
+            </button>
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-1.5">
+            <div class="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider">💡 核心一句話總結</div>
+            <p class="text-sm font-medium text-slate-800 dark:text-slate-100 leading-relaxed">${con.core_takeaway}</p>
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50 space-y-2.5">
+            <div class="text-xs sm:text-sm font-bold text-blue-800 dark:text-blue-300">📚 全書精華回顧</div>
+            <ul class="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300 list-disc pl-5 leading-relaxed">
+              ${con.key_pillars.map(p => `<li>${p}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50 space-y-1.5">
+            <div class="text-xs sm:text-sm font-bold text-emerald-800 dark:text-emerald-300">🚀 總結實踐建議</div>
+            <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">${con.action_plan}</p>
+          </div>
+
+          <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-700">
+            <button onclick="selectReaderChapter(${chapters.length}, true)" class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+              ← 返回第 ${chapters.length} 章
+            </button>
+            <button onclick="showLibraryShelf()" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition">
+              🏛️ 返回好書書架總覽
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const c = chapters.find(ch => ch.num === target);
+      if (!c) return;
+      const mastered = getMasteredSet(activeBook.id);
+      const isDone = mastered.has(c.num);
+      const escapedQuote = (c.quote || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+      pane.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 text-xs font-bold">第 ${c.num} / ${chapters.length} 章</span>
+              <span class="text-xs font-medium text-purple-600 dark:text-purple-400">${c.part_title}</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">${c.title_zh}</h3>
+            <p class="text-xs font-serif italic text-slate-500 dark:text-slate-400">${c.title_en}</p>
+            <div class="inline-block mt-1 px-3 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-xs font-bold text-purple-800 dark:text-purple-300">
+              核心法則：${c.principle_zh}
+            </div>
+          </div>
+
+          <div class="flex flex-wrap sm:flex-col gap-2 flex-shrink-0">
+            <button onclick="readChapterCantonese(${c.num})" class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition">
+              <span>🔊</span><span>廣東話導讀本章</span>
+            </button>
+            <button onclick="startContinuousReading(${c.num})" class="px-3 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 text-xs font-semibold flex items-center justify-center space-x-1 transition">
+              <span>▶️</span><span>由此章續航連播</span>
+            </button>
+            <button onclick="toggleMastered(${c.num})" class="px-3 py-1.5 rounded-lg border text-xs font-semibold transition ${isDone ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 text-emerald-700 dark:text-emerald-300' : 'bg-slate-50 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200'}">
+              ${isDone ? '✅ 已掌握本章' : '☐ 標記已掌握'}
+            </button>
+          </div>
+        </div>
+
+        <!-- Quote Banner (English + Chinese Explanation) -->
+        <div class="p-4 rounded-xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/60 flex items-start justify-between gap-3">
+          <div class="space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-400">名著英文金句原聲 &amp; 中文釋義</span>
+            <p class="font-serif italic text-purple-950 dark:text-purple-200 text-sm leading-relaxed">"${c.quote}"</p>
+            ${c.quote_zh ? `<p class="text-xs text-purple-900/90 dark:text-purple-300/90 leading-relaxed pt-1 border-t border-purple-200/70 dark:border-purple-800/50"><span class="font-semibold">中文解釋：</span>${c.quote_zh}</p>` : ''}
+          </div>
+          <button onclick="speakEnglishQuote('${escapedQuote}', ${c.num})" class="flex-shrink-0 px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-semibold flex items-center space-x-1 shadow-sm transition">
+            <span>🔊</span><span>英語原聲</span>
+          </button>
+        </div>
+
+        <!-- 3 Layers of Deep Content -->
+        <div class="space-y-5 text-sm leading-relaxed">
+          <div class="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50 space-y-1.5">
+            <div class="flex items-center space-x-2 font-bold text-slate-900 dark:text-white text-xs sm:text-sm">
+              <span class="w-5 h-5 rounded bg-blue-600 text-white flex items-center justify-center text-[11px]">1</span>
+              <span>【第一層·底層人性心理密碼】（抽絲剝繭）</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">${c.layer1_psychology}</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/50 space-y-1.5">
+            <div class="flex items-center space-x-2 font-bold text-slate-900 dark:text-white text-xs sm:text-sm">
+              <span class="w-5 h-5 rounded bg-amber-600 text-white flex items-center justify-center text-[11px]">2</span>
+              <span>【第二層·經典歷史名案解析】（還原名著典故）</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">${c.layer2_anecdote}</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50 space-y-1.5">
+            <div class="flex items-center space-x-2 font-bold text-slate-900 dark:text-white text-xs sm:text-sm">
+              <span class="w-5 h-5 rounded bg-emerald-600 text-white flex items-center justify-center text-[11px]">3</span>
+              <span>【第三層·現代生活實踐步驟】（由淺入深的執行路徑）</span>
+            </div>
+            <div class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm whitespace-pre-line leading-relaxed">${c.layer3_action}</div>
+          </div>
+        </div>
+
+        <!-- Prev / Next Navigation -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-700">
+          <button onclick="selectReaderChapter(${Math.max(1, c.num - 1)}, true)" ${c.num === 1 ? 'disabled' : ''} class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-xs font-semibold transition ${c.num === 1 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-slate-100 dark:hover:bg-slate-700'}">
+            ← 上一章
+          </button>
+          <span class="text-xs text-slate-400 font-medium">第 ${c.num} 章 / 共 ${chapters.length} 章</span>
+          ${c.num === chapters.length && activeBook.conclusion
+            ? `<button onclick="selectReaderConclusion(true)" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition">前往全書總結 🏁 →</button>`
+            : `<button onclick="selectReaderChapter(${Math.min(chapters.length, c.num + 1)}, true)" ${c.num === chapters.length ? 'disabled' : ''} class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition ${c.num === chapters.length ? 'opacity-40 cursor-not-allowed' : ''}">下一章 →</button>`
+          }
+        </div>
+      `;
+    }
+
+    // ================= PANORAMIC CHAPTER LIST RENDERING =================
+    function renderChaptersList(list) {
+      const container = document.getElementById('chapter-list-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="text-center py-12 text-slate-400 text-sm">未找到符合搜尋條件的章節，請嘗試更換關鍵字。</div>';
+        return;
+      }
+
+      const mastered = getMasteredSet(activeBook.id);
+      list.forEach(c => {
+        const isOpen = listExpandedSet.has(c.num);
+        const isDone = mastered.has(c.num);
+        const escapedQuote = (c.quote || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const card = document.createElement('div');
+        card.id = `chapter-card-${c.num}`;
+        card.className = "bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition hover:border-purple-400";
+
+        card.innerHTML = `
+          <div class="p-4 sm:p-5 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3" onclick="toggleChapterDetails(${c.num})">
+            <div class="flex items-start space-x-3.5">
+              <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-300 font-bold text-xs flex items-center justify-center">${c.num}</span>
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-[11px] font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider">${c.part_title}</span>
+                  <span class="text-slate-300 dark:text-slate-600">•</span>
+                  <span class="text-[11px] text-slate-500 font-serif italic">${c.title_en}</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white mt-0.5">${c.title_zh} ${isDone ? '✅' : ''}</h3>
+                <p class="text-xs text-purple-700 dark:text-purple-300 font-medium mt-1">核心法則：${c.principle_zh}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2 self-end sm:self-center" onclick="event.stopPropagation()">
+              <button onclick="readChapterCantonese(${c.num})" class="px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 text-xs font-semibold flex items-center space-x-1 transition">
+                <span>🔊</span><span>廣東話導讀</span>
+              </button>
+              <button onclick="toggleChapterDetails(${c.num})" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+                <svg class="w-5 h-5 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}" id="arrow-svg-${c.num}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="chapter-detail-${c.num}" class="${isOpen ? '' : 'hidden'} border-t border-slate-200 dark:border-slate-700 p-5 space-y-4 bg-slate-50/50 dark:bg-slate-900/30 text-xs leading-relaxed">
+            <div class="p-3.5 rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/60 flex items-start justify-between gap-3">
+              <div class="space-y-1.5">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-400">名著英文金句原聲 &amp; 中文釋義</span>
+                <p class="font-serif italic text-purple-950 dark:text-purple-200 text-xs">"${c.quote}"</p>
+                ${c.quote_zh ? `<p class="text-xs text-purple-900/90 dark:text-purple-300/90 pt-1 border-t border-purple-200/70 dark:border-purple-800/50"><span class="font-semibold">中文解釋：</span>${c.quote_zh}</p>` : ''}
+              </div>
+              <button onclick="speakEnglishQuote('${escapedQuote}', ${c.num})" class="flex-shrink-0 px-2 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-[11px] font-semibold flex items-center space-x-1 shadow-sm transition">
+                <span>🔊</span><span>英語原聲</span>
+              </button>
+            </div>
+            <div><strong class="text-blue-700 dark:text-blue-400">1. 【第一層·底層人性心理密碼】</strong><p class="mt-1 text-slate-700 dark:text-slate-300">${c.layer1_psychology}</p></div>
+            <div><strong class="text-amber-700 dark:text-amber-400">2. 【第二層·經典歷史名案解析】</strong><p class="mt-1 text-slate-700 dark:text-slate-300">${c.layer2_anecdote}</p></div>
+            <div><strong class="text-emerald-700 dark:text-emerald-400">3. 【第三層·現代生活實踐步驟】</strong><div class="mt-1 whitespace-pre-line text-slate-700 dark:text-slate-300">${c.layer3_action}</div></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Append Full Book Conclusion card at the end of list
+      if (activeBook && activeBook.conclusion) {
+        const con = activeBook.conclusion;
+        const conCard = document.createElement('div');
+        conCard.id = 'panoramic-conclusion-card';
+        conCard.className = "bg-gradient-to-br from-amber-50 to-orange-50/40 dark:from-amber-950/30 dark:to-slate-800 rounded-xl border-2 border-amber-300 dark:border-amber-700/70 p-5 sm:p-6 shadow-sm space-y-4";
+        conCard.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200 dark:border-amber-800/60 pb-3">
+            <div>
+              <span class="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">🏁 全書總結</span>
+              <h3 class="text-lg font-extrabold text-slate-900 dark:text-white mt-0.5">${con.title}</h3>
+            </div>
+            <button onclick="readBookConclusionCantonese()" class="self-start sm:self-center px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center space-x-1 transition">
+              <span>🔊</span><span>廣東話朗讀總結</span>
+            </button>
+          </div>
+          <p class="text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-100 leading-relaxed">${con.core_takeaway}</p>
+          <ul class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc pl-5 leading-relaxed">
+            ${con.key_pillars.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+          <div class="p-3 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-amber-200/70 dark:border-amber-800/50 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+            <strong class="text-emerald-700 dark:text-emerald-400">🚀 總結實踐建議：</strong>${con.action_plan}
+          </div>
+        `;
+        container.appendChild(conCard);
+      }
+    }
+
+    function toggleChapterDetails(num) {
+      const el = document.getElementById(`chapter-detail-${num}`);
+      const svg = document.getElementById(`arrow-svg-${num}`);
+      if (!el) return;
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        listExpandedSet.add(num);
+        if (svg) svg.classList.add('rotate-180');
+      } else {
+        el.classList.add('hidden');
+        listExpandedSet.delete(num);
+        if (svg) svg.classList.remove('rotate-180');
+      }
+    }
+
+    function expandAllList(expand) {
+      const list = getFilteredChapters();
+      if (expand) list.forEach(c => listExpandedSet.add(c.num));
+      else listExpandedSet.clear();
+      renderChaptersList(list);
+    }
+
+    function filterByPart(partNum) {
+      currentPartFilter = partNum;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-purple-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
+      });
+      const activeBtn = document.getElementById(`filter-btn-${partNum}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
+        activeBtn.classList.add('bg-purple-600', 'text-white');
+      }
+      renderChaptersList(getFilteredChapters());
+    }
+
+    function scrollToChapters() {
+      const el = document.getElementById('chapters-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ================= LIBRARY SHELF VIEW (LIST + GRID) =================
+    function setShelfViewMode(mode) {
+      shelfViewMode = mode;
+      const listBtn = document.getElementById('shelf-view-list-btn');
+      const gridBtn = document.getElementById('shelf-view-grid-btn');
+      if (mode === 'list') {
+        listBtn.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition shadow-sm bg-purple-600 text-white';
+        gridBtn.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900';
+      } else {
+        gridBtn.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition shadow-sm bg-purple-600 text-white';
+        listBtn.className = 'px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900';
+      }
+      renderLibraryShelf();
+    }
+
+    function renderShelfCategories() {
+      const box = document.getElementById('shelf-category-filters');
+      if (!box) return;
+      const cats = [];
+      libraryBooks.forEach(b => {
+        if (!cats.includes(b.category)) cats.push(b.category);
+      });
+      box.innerHTML = `
+        <button onclick="filterShelf('all')" id="shelf-cat-all" class="shelf-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex-shrink-0 ${shelfCategory === 'all' ? 'bg-purple-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200'}">全部 (${libraryBooks.length})</button>
+      ` + cats.map(c => `
+        <button onclick="filterShelf('${c}')" id="shelf-cat-${c}" class="shelf-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium flex-shrink-0 ${shelfCategory === c ? 'bg-purple-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200'}">${c}</button>
+      `).join('');
+    }
+
+    function showLibraryShelf() {
+      stopSpeech();
+      document.getElementById('library-shelf-view').classList.remove('hidden');
+      document.getElementById('book-reader-view').classList.add('hidden');
+      document.getElementById('finance-column-view')?.classList.add('hidden');
+      document.getElementById('btnShowShelf').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-purple-600 text-white shadow-sm transition flex items-center space-x-1.5 flex-shrink-0';
+      document.getElementById('btnShowActiveBook').className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center space-x-1.5 flex-shrink-0';
+      document.getElementById('btnShowFinance').className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition flex items-center space-x-1.5 flex-shrink-0';
+      renderShelfCategories();
+      renderLibraryShelf();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openActiveBookReader() {
+      if (activeBook) openBookInLibrary(activeBook.id);
+    }
+
+    function openBookInLibrary(bookId) {
+      stopSpeech();
+      const b = libraryBooks.find(item => item.id === bookId) || libraryBooks[0];
+      if (!b) return;
+      activeBook = b;
+      chapters = activeBook.chapters || [];
+      activeChapterNum = 1;
+      currentPartFilter = 0;
+      listExpandedSet.clear();
+
+      document.getElementById('library-shelf-view').classList.add('hidden');
+      document.getElementById('book-reader-view').classList.remove('hidden');
+      document.getElementById('finance-column-view')?.classList.add('hidden');
+      document.getElementById('btnShowActiveBook').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-purple-600 text-white shadow-sm transition flex items-center space-x-1.5 flex-shrink-0';
+      document.getElementById('btnShowShelf').className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center space-x-1.5 flex-shrink-0';
+      document.getElementById('btnShowFinance').className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition flex items-center space-x-1.5 flex-shrink-0';
+
+      document.getElementById('activeBookTabLabel').textContent = `正在精讀：《${activeBook.title}》`;
+      document.getElementById('readerBreadcrumbInfo').textContent = `正在精讀：《${activeBook.title}》(全 ${chapters.length} 章 + 全書總結)`;
+
+      document.getElementById('heroBookBadge').textContent = activeBook.badge;
+      document.getElementById('heroBookAuthor').textContent = activeBook.author;
+      document.getElementById('heroBookTitle').textContent = `《${activeBook.title}》全書 ${chapters.length} 章逐層遞進全景深度解構`;
+      document.getElementById('heroBookSubtitle').textContent = activeBook.subtitle;
+      document.getElementById('heroBookSummary').textContent = activeBook.summary;
+
+      const heroParts = document.getElementById('hero-parts-grid');
+      if (heroParts && activeBook.parts) {
+        heroParts.innerHTML = activeBook.parts.map(p => `
+          <div onclick="jumpToPart(${p.part})" class="bg-white/10 hover:bg-white/15 cursor-pointer backdrop-blur-md rounded-xl p-3.5 border border-white/10 transition group">
+            <span class="text-[10px] font-bold text-purple-300 uppercase tracking-wider">${p.title.split('：')[0]}</span>
+            <h4 class="text-xs font-bold text-white mt-1 group-hover:text-purple-200 truncate">${p.title.split('：')[1] || p.title}</h4>
+            <p class="text-[11px] text-slate-300 mt-1 line-clamp-2">${p.desc}</p>
+            <div class="mt-2 text-[10px] text-purple-300 font-semibold flex items-center space-x-1">
+              <span>進入精讀 →</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const sel = document.getElementById('readerPartFilter');
+      if (sel && activeBook.parts) {
+        sel.innerHTML = `<option value="0">全部篇章 (1-${chapters.length})</option>` +
+          activeBook.parts.map(p => `<option value="${p.part}">${p.title}</option>`).join('');
+        sel.value = "0";
+      }
+
+      const partBtnsBox = document.getElementById('list-part-filter-buttons');
+      if (partBtnsBox && activeBook.parts) {
+        partBtnsBox.innerHTML = `
+          <button onclick="filterByPart(0)" id="filter-btn-0" class="filter-btn px-2.5 py-1 text-xs rounded-md bg-purple-600 text-white font-semibold">全部 ${chapters.length} 章</button>
+        ` + activeBook.parts.map(p => `
+          <button onclick="filterByPart(${p.part})" id="filter-btn-${p.part}" class="filter-btn px-2.5 py-1 text-xs rounded-md bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">${p.title.split('：')[0]}</button>
+        `).join('');
+      }
+
+      const sInput = document.getElementById('chapterSearch');
+      if (sInput) sInput.value = '';
+
+      updateProgressUI();
+      if (currentViewMode === 'reader') {
+        renderReaderToc();
+        renderReaderPane(1);
+      } else {
+        renderChaptersList(chapters);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterShelf(cat) {
+      shelfCategory = cat;
+      renderShelfCategories();
+      renderLibraryShelf();
+    }
+
+    function renderLibraryShelf() {
+      const container = document.getElementById('library-books-container');
+      if (!container) return;
+      const q = (document.getElementById('shelfSearchInput')?.value || '').trim().toLowerCase();
+      const filtered = libraryBooks.filter(b => {
+        const matchCat = shelfCategory === 'all' || b.category === shelfCategory;
+        if (!matchCat) return false;
+        if (!q) return true;
+        return b.title.toLowerCase().includes(q) ||
+               b.subtitle.toLowerCase().includes(q) ||
+               b.author.toLowerCase().includes(q) ||
+               b.category.toLowerCase().includes(q) ||
+               b.summary.toLowerCase().includes(q);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 py-12 text-center text-slate-400 text-sm">無符合條件的書籍</div>';
+        return;
+      }
+
+      if (shelfViewMode === 'list') {
+        // LINE-BY-LINE MACRO BOOK DIRECTORY
+        container.innerHTML = `
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+            <div class="px-4 py-3 bg-slate-50 dark:bg-slate-850 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span class="font-semibold text-slate-700 dark:text-slate-200">📋 宏觀書庫總目錄（共顯示 ${filtered.length} / ${libraryBooks.length} 本）</span>
+              <span>一行一本・快速瀏覽</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 dark:border-slate-700 text-[11px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+                    <th class="py-2.5 pl-4 pr-2 w-12 text-center">#</th>
+                    <th class="py-2.5 px-3">書名 / 原著名稱</th>
+                    <th class="py-2.5 px-3 hidden md:table-cell">作者</th>
+                    <th class="py-2.5 px-3 hidden sm:table-cell">分類</th>
+                    <th class="py-2.5 px-3 text-center w-24">章節</th>
+                    <th class="py-2.5 px-3 hidden lg:table-cell w-36">精讀進度</th>
+                    <th class="py-2.5 pl-2 pr-4 text-right w-28">操作</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-700/60 text-xs">
+                  ${filtered.map((b, idx) => {
+                    const mastered = getMasteredSet(b.id);
+                    const pct = b.chaptersCount > 0 ? Math.round((mastered.size / b.chaptersCount) * 100) : 0;
+                    return `
+                      <tr onclick="openBookInLibrary('${b.id}')" class="hover:bg-purple-50/60 dark:hover:bg-purple-950/20 cursor-pointer transition group">
+                        <td class="py-3 pl-4 pr-2 text-center font-mono text-slate-400 font-semibold">${String(idx + 1).padStart(2, '0')}</td>
+                        <td class="py-3 px-3">
+                          <div class="flex items-center space-x-2.5 min-w-0">
+                            <span class="text-lg flex-shrink-0">${b.icon}</span>
+                            <div class="min-w-0">
+                              <div class="font-bold text-slate-900 dark:text-white group-hover:text-purple-700 dark:group-hover:text-purple-300 truncate">《${b.title}》</div>
+                              <div class="text-[11px] font-serif italic text-slate-400 truncate">${b.subtitle}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="py-3 px-3 text-slate-600 dark:text-slate-300 hidden md:table-cell truncate max-w-[180px]">${b.author}</td>
+                        <td class="py-3 px-3 hidden sm:table-cell">
+                          <span class="inline-flex px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">${b.category}</span>
+                        </td>
+                        <td class="py-3 px-3 text-center font-semibold text-purple-700 dark:text-purple-300">${b.chaptersCount} 章</td>
+                        <td class="py-3 px-3 hidden lg:table-cell">
+                          <div class="flex items-center space-x-2">
+                            <div class="flex-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                              <div class="h-full bg-gradient-to-r from-purple-500 to-emerald-500" style="width: ${pct}%;"></div>
+                            </div>
+                            <span class="text-[10px] font-semibold text-slate-500 w-8 text-right">${pct}%</span>
+                          </div>
+                        </td>
+                        <td class="py-3 pl-2 pr-4 text-right">
+                          <button class="px-2.5 py-1.5 rounded-lg bg-purple-600 group-hover:bg-purple-700 text-white text-[11px] font-semibold transition shadow-sm">
+                            精讀 →
+                          </button>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      } else {
+        // CARD GRID VIEW
+        container.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            ${filtered.map(b => {
+              const mastered = getMasteredSet(b.id);
+              const pct = b.chaptersCount > 0 ? Math.round((mastered.size / b.chaptersCount) * 100) : 0;
+              return `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                  <div class="space-y-3">
+                    <div class="flex items-start justify-between gap-2">
+                      <span class="text-3xl p-2 rounded-xl bg-slate-100 dark:bg-slate-700/60">${b.icon}</span>
+                      <div class="flex flex-col items-end space-y-1">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${b.badgeColor}">${b.badge}</span>
+                        <span class="text-[10px] text-slate-400">${b.category}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 class="text-base font-bold text-slate-900 dark:text-white">《${b.title}》</h3>
+                      <p class="text-xs font-serif italic text-slate-500 dark:text-slate-400 truncate">${b.subtitle}</p>
+                      <p class="text-xs text-purple-700 dark:text-purple-300 font-medium mt-0.5">${b.author}</p>
+                    </div>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">${b.summary}</p>
+                  </div>
+                  <div class="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-700/60">
+                    <div class="flex items-center justify-between text-[11px] text-slate-500">
+                      <span>進度: ${mastered.size} / ${b.chaptersCount} 章</span>
+                      <span class="font-bold text-purple-600 dark:text-purple-400">${pct}%</span>
+                    </div>
+                    <div class="w-full h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                      <div class="h-full bg-gradient-to-r from-purple-500 to-emerald-500" style="width: ${pct}%;"></div>
+                    </div>
+                    <button onclick="openBookInLibrary('${b.id}')" class="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition flex items-center justify-center space-x-1.5 shadow-sm">
+                      <span>進入精讀 (${b.chaptersCount} 章)</span>
+                      <span>→</span>
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+    }
+
+
+    // ================= FINANCE COLUMN & INVESTMENT LAB (v4.0) =================
+    const portfolioBuckets = [
+      { id: 'cash', label: '港元定期 / 貨幣基金', ret: 3.2, div: 3.2, pct: 10, color: 'bg-slate-500' },
+      { id: 'bluechip', label: '傳統高息藍籌 (0005/0941/0002)', ret: 8.0, div: 5.8, pct: 25, color: 'bg-teal-500' },
+      { id: 'hdiv_etf', label: '香港高息 ETF (3110 / 3070)', ret: 7.5, div: 6.0, pct: 30, color: 'bg-emerald-500' },
+      { id: 'cov_etf', label: '備兌期權 ETF (3416 / 3555)', ret: 10.5, div: 14.0, pct: 15, color: 'bg-amber-500' },
+      { id: 'growth_etf', label: '大市 / 科指增長 ETF (2800/3033)', ret: 9.5, div: 1.8, pct: 20, color: 'bg-purple-600' }
+    ];
+
+    function fmtHKD(n) {
+      return 'HK$' + Math.round(n).toLocaleString('en-US');
+    }
+
+    function showFinanceColumn() {
+      stopSpeech();
+      document.getElementById('library-shelf-view').classList.add('hidden');
+      document.getElementById('book-reader-view').classList.add('hidden');
+      document.getElementById('finance-column-view').classList.remove('hidden');
+
+      document.getElementById('btnShowFinance').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition flex items-center space-x-1.5 flex-shrink-0';
+      document.getElementById('btnShowShelf').className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center space-x-1.5 flex-shrink-0';
+      document.getElementById('btnShowActiveBook').className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center space-x-1.5 flex-shrink-0';
+
+      initFinanceModule();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function initFinanceModule() {
+      const finData = window.FINANCE_COLUMN_DATA;
+      if (finData) {
+        const disc = document.getElementById('financeDisclaimer');
+        if (disc) disc.textContent = '⚠️ ' + finData.disclaimer;
+        renderFinanceArticles(finData.articles || []);
+      }
+      renderPortfolioSliders();
+      calcTool1();
+      calcTool2();
+      calcTool3();
+      calcTool4();
+      calcTool5();
+    }
+
+    function renderFinanceArticles(articles) {
+      const grid = document.getElementById('finance-articles-grid');
+      if (!grid) return;
+      grid.innerHTML = articles.map(a => `
+        <article class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 sm:p-6 shadow-sm flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${a.badgeColor}">${a.badge}</span>
+              <button onclick="readFinanceArticle('${a.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold flex items-center space-x-1 transition shadow-sm">
+                <span>🔊</span><span>廣東話導讀</span>
+              </button>
+            </div>
+            <div>
+              <h4 class="text-base font-extrabold text-slate-900 dark:text-white leading-snug">${a.title}</h4>
+              <p class="text-[11px] font-semibold text-indigo-600 dark:text-indigo-300 mt-1">${a.authority}</p>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700/60">${a.summary}</p>
+            <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">
+              ${a.keyPoints.map(pt => `<li class="flex items-start space-x-2"><span class="text-emerald-500 font-bold mt-0.5">•</span><span>${pt}</span></li>`).join('')}
+            </ul>
+          </div>
+          ${a.sources && a.sources.length ? `
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60 flex flex-wrap gap-2 items-center text-[11px]">
+              <span class="text-slate-400 font-semibold">參考資料:</span>
+              ${a.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="text-sky-600 dark:text-sky-400 hover:underline font-medium">🔗 ${s.label}</a>`).join('')}
+            </div>
+          ` : ''}
+        </article>
+      `).join('');
+    }
+
+    function readFinanceArticle(articleId) {
+      const finData = window.FINANCE_COLUMN_DATA;
+      if (!finData) return;
+      const a = (finData.articles || []).find(item => item.id === articleId);
+      if (!a) return;
+      continuousChapterQueue = [];
+      const text = `${a.title}。${a.authority}。${a.summary}。` + a.keyPoints.join(' ');
+      playSpeechQueue(chunkText(text), 'zh-HK', `財經專欄：${a.title}`);
+    }
+
+    // TOOL 1: Compounding across HK instruments
+    function calcTool1() {
+      const P = Math.max(0, parseFloat(document.getElementById('fin1Capital')?.value) || 0);
+      const M = Math.max(0, parseFloat(document.getElementById('fin1Monthly')?.value) || 0);
+      const Y = Math.max(1, parseInt(document.getElementById('fin1Years')?.value || '15', 10));
+      const drip = document.getElementById('fin1Drip')?.checked ?? true;
+      document.getElementById('fin1YearsLabel').textContent = `${Y} 年`;
+
+      const totalPrincipal = P + M * 12 * Y;
+      document.getElementById('fin1PrincipalSummary').textContent = `累計總投入本金: ${fmtHKD(totalPrincipal)}`;
+
+      const instruments = (window.FINANCE_COLUMN_DATA && window.FINANCE_COLUMN_DATA.hkInstruments) || [];
+      const rows = instruments.map(inst => {
+        const effAnnualRate = (drip ? inst.totalReturn : Math.max(0, inst.totalReturn - inst.divYield * 0.4)) / 100;
+        const r = effAnnualRate / 12;
+        const n = Y * 12;
+        const fv = r > 0 ? P * Math.pow(1 + r, n) + M * ((Math.pow(1 + r, n) - 1) / r) : P + M * n;
+        const profit = fv - totalPrincipal;
+        const annualDiv = fv * (inst.divYield / 100);
+        return { ...inst, fv, profit, annualDiv };
+      });
+
+      const maxFv = Math.max(...rows.map(r => r.fv), 1);
+      const container = document.getElementById('fin1Results');
+      if (!container) return;
+      container.innerHTML = rows.map(r => {
+        const widthPct = Math.max(6, Math.round((r.fv / maxFv) * 100));
+        return `
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/70 space-y-1.5">
+            <div class="flex items-center justify-between gap-2 text-xs">
+              <div class="font-bold text-slate-900 dark:text-white truncate">${r.name} <span class="text-[10px] font-normal text-slate-400">(${r.ticker}・約${r.totalReturn}%/年)</span></div>
+              <div class="font-extrabold text-emerald-700 dark:text-emerald-400 flex-shrink-0">${fmtHKD(r.fv)}</div>
+            </div>
+            <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+              <div class="h-full ${r.color} transition-all duration-300" style="width: ${widthPct}%;"></div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 gap-2">
+              <span>純利潤: <strong class="text-slate-700 dark:text-slate-200">+${fmtHKD(r.profit)}</strong></span>
+              <span>第 ${Y} 年預期年股息: <strong class="text-amber-600 dark:text-amber-400">${fmtHKD(r.annualDiv)}/年</strong> (${fmtHKD(r.annualDiv/12)}/月)</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // TOOL 2: Custom Portfolio Allocation
+    function renderPortfolioSliders() {
+      const box = document.getElementById('fin2Sliders');
+      if (!box) return;
+      box.innerHTML = portfolioBuckets.map((b, i) => `
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 ${b.color}"></span>
+          <span class="w-44 sm:w-52 truncate font-medium text-slate-700 dark:text-slate-200">${b.label}</span>
+          <input type="range" min="0" max="100" step="5" value="${b.pct}" oninput="updateBucketPct(${i}, this.value)" class="flex-1 accent-purple-600">
+          <span class="w-10 text-right font-bold text-slate-900 dark:text-white">${b.pct}%</span>
+        </div>
+      `).join('');
+    }
+
+    function updateBucketPct(idx, val) {
+      portfolioBuckets[idx].pct = parseInt(val, 10) || 0;
+      renderPortfolioSliders();
+      calcTool2();
+    }
+
+    function applyPresetPortfolio(type) {
+      const presets = {
+        conservative: [20, 20, 35, 15, 10],
+        balanced: [10, 25, 30, 15, 20],
+        growth: [5, 15, 20, 10, 50]
+      };
+      const arr = presets[type] || presets.balanced;
+      arr.forEach((v, i) => { portfolioBuckets[i].pct = v; });
+      renderPortfolioSliders();
+      calcTool2();
+    }
+
+    function normalizePortfolio() {
+      const sum = portfolioBuckets.reduce((acc, b) => acc + b.pct, 0);
+      if (sum === 0) {
+        applyPresetPortfolio('balanced');
+        return;
+      }
+      let running = 0;
+      portfolioBuckets.forEach((b, idx) => {
+        if (idx === portfolioBuckets.length - 1) {
+          b.pct = Math.max(0, 100 - running);
+        } else {
+          b.pct = Math.round((b.pct / sum) * 100);
+          running += b.pct;
+        }
+      });
+      renderPortfolioSliders();
+      calcTool2();
+    }
+
+    function calcTool2() {
+      const P = Math.max(0, parseFloat(document.getElementById('fin2Capital')?.value) || 0);
+      const M = Math.max(0, parseFloat(document.getElementById('fin2Monthly')?.value) || 0);
+      const Y = Math.max(1, parseInt(document.getElementById('fin2Years')?.value || '10', 10));
+      document.getElementById('fin2YearsLabel').textContent = `${Y} 年`;
+
+      const sumPct = portfolioBuckets.reduce((acc, b) => acc + b.pct, 0);
+      const norm = sumPct > 0 ? sumPct : 100;
+      const wReturn = portfolioBuckets.reduce((acc, b) => acc + b.ret * (b.pct / norm), 0);
+      const wDiv = portfolioBuckets.reduce((acc, b) => acc + b.div * (b.pct / norm), 0);
+
+      const r = (wReturn / 100) / 12;
+      const n = Y * 12;
+      const fv = r > 0 ? P * Math.pow(1 + r, n) + M * ((Math.pow(1 + r, n) - 1) / r) : P + M * n;
+      const totalPrincipal = P + M * 12 * Y;
+      const annualDiv = fv * (wDiv / 100);
+
+      const box = document.getElementById('fin2Summary');
+      if (!box) return;
+      const statusBadge = sumPct === 100
+        ? '<span class="text-emerald-700 dark:text-emerald-300 font-bold">✅ 比例總和: 100%</span>'
+        : `<span class="text-amber-700 dark:text-amber-300 font-bold">⚠️ 目前總和 ${sumPct}%（已按比例換算，可按上方自動平衡）</span>`;
+
+      const barSegs = portfolioBuckets.filter(b => b.pct > 0).map(b =>
+        `<div class="h-full ${b.color}" style="width:${(b.pct / norm) * 100}%;" title="${b.label}: ${b.pct}%"></div>`
+      ).join('');
+
+      box.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+          ${statusBadge}
+          <span class="text-slate-600 dark:text-slate-300">加權預期回報: <strong class="text-purple-700 dark:text-purple-300">${wReturn.toFixed(2)}%/年</strong> • 平均股息率: <strong>${wDiv.toFixed(2)}%</strong></span>
+        </div>
+        <div class="w-full h-3 rounded-full overflow-hidden flex bg-slate-200 dark:bg-slate-700">${barSegs}</div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
+          <div class="bg-white/80 dark:bg-slate-900/60 p-2.5 rounded-lg">
+            <div class="text-[11px] text-slate-500">${Y} 年後組合總值</div>
+            <div class="text-sm font-extrabold text-purple-700 dark:text-purple-300">${fmtHKD(fv)}</div>
+          </div>
+          <div class="bg-white/80 dark:bg-slate-900/60 p-2.5 rounded-lg">
+            <div class="text-[11px] text-slate-500">累計純利潤 (扣本金)</div>
+            <div class="text-sm font-extrabold text-emerald-700 dark:text-emerald-400">+${fmtHKD(fv - totalPrincipal)}</div>
+          </div>
+          <div class="bg-white/80 dark:bg-slate-900/60 p-2.5 rounded-lg">
+            <div class="text-[11px] text-slate-500">第 ${Y} 年被動股息</div>
+            <div class="text-sm font-extrabold text-amber-600 dark:text-amber-400">${fmtHKD(annualDiv / 12)}/月</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // TOOL 3: HSI P/E & Moving Average Valuation Thermometer
+    function calcTool3() {
+      const pe = parseFloat(document.getElementById('fin3PE')?.value || '11.16');
+      const maDev = parseFloat(document.getElementById('fin3MA250')?.value || '0');
+      const bond = parseFloat(document.getElementById('fin3Bond')?.value || '4.3');
+      document.getElementById('fin3PELabel').textContent = `${pe.toFixed(2)}x`;
+
+      const earningsYield = (1 / pe) * 100;
+      const spread = earningsYield - bond;
+      const posPct = Math.min(100, Math.max(0, ((pe - 6.5) / (22.0 - 6.5)) * 100));
+
+      let zone, zoneColor, advice;
+      if (pe < 9.5) {
+        zone = '🟢 極度便宜（黃金恐慌吸納區）';
+        zoneColor = 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300';
+        advice = '估值顯著低於近 20 年歷史均值，安全邊際極厚。按《聰明的投資者》與《掌握市場週期》原則，宜分批提高股票倉位（例如 70%–85% 持股），重點吸納優質 2800 盈富及高息藍籌。';
+      } else if (pe < 11.8) {
+        zone = '🟦 合理偏平區（低於長期歷史均值）';
+        zoneColor = 'bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950/60 dark:text-sky-300';
+        advice = '處於近年偏低至中位水平，相比歐美股市仍有折讓。適合維持核心底倉（60%–70% 持股）並配合每月定投，同時保留約 30% 現金作波動加碼緩衝。';
+      } else if (pe < 14.5) {
+        zone = '🟨 均值平衡區（正常估值區間）';
+        zoneColor = 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300';
+        advice = '接近 1997 年至今長期均值（~14.1x）。大市整體唔算平亦未過熱，宜維持中性平衡倉位（50%–60%），重質不重量，精選自由現金流強嘅高息股或 3110。';
+      } else if (pe < 16.5) {
+        zone = '🟧 偏貴警戒區（高於歷史均值）';
+        zoneColor = 'bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-950/60 dark:text-orange-300';
+        advice = '市場情緒趨向樂觀，安全邊際收窄。應停止盲目追高，逐步將部分增長股利潤轉移至港元定期或高息防禦資產（持股降至 35%–45%）。';
+      } else {
+        zone = '🔴 泡沫高危區（歷史高位警示）';
+        zoneColor = 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-950/60 dark:text-rose-300';
+        advice = '市盈率已處於歷史極端高位！按波浪頂背馳警覺及霍華德·馬克斯週期法則，應果斷分批獲利減磅（持股降至 20%–30%），鎖定現金靜待下一次大浪調整。';
+      }
+
+      const maNote = maDev > 15
+        ? `⚠️ 現價高於 MA250 牛熊線 +${maDev}%，短線統計偏離較大，提防均值回歸回吐。`
+        : maDev < -10
+          ? `💡 現價低於 MA250 年線 ${maDev}%，屬中長線超賣區，留意底背馳築底訊號。`
+          : `✅ 現價接近 MA250 牛熊線（${maDev >= 0 ? '+' : ''}${maDev}%），處於健康趨勢軌道。`;
+
+      document.getElementById('fin3Output').innerHTML = `
+        <div class="p-3.5 rounded-xl border ${zoneColor} space-y-2">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span class="text-xs font-extrabold">${zone}</span>
+            <span class="text-[11px] font-semibold">盈利收益率: ${earningsYield.toFixed(2)}% (股債息差: ${spread >= 0 ? '+' : ''}${spread.toFixed(2)}%)</span>
+          </div>
+          <div class="relative w-full h-3 rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 to-rose-600">
+            <div class="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-2 border-slate-900 shadow" style="left: calc(${posPct}% - 8px);"></div>
+          </div>
+          <div class="flex justify-between text-[10px] opacity-80 font-mono">
+            <span>6.5x (極平)</span><span>11.5x (近10年均值)</span><span>14.1x (長期均值)</span><span>22.0x (泡沫)</span>
+          </div>
+        </div>
+        <div class="text-xs text-slate-600 dark:text-slate-300 space-y-1.5 bg-slate-50 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+          <p><strong>📍 週期倉位指引：</strong>${advice}</p>
+          <p><strong>📐 均線統計校準：</strong>${maNote}</p>
+        </div>
+      `;
+    }
+
+    // TOOL 4: Rich Dad vs Poor Dad Simulator
+    function calcTool4() {
+      const income = Math.max(0, parseFloat(document.getElementById('fin4Income')?.value) || 0);
+      const expense = Math.max(1000, parseFloat(document.getElementById('fin4Expense')?.value) || 1000);
+      const poorDebt = Math.max(0, parseFloat(document.getElementById('fin4PoorDebt')?.value) || 0);
+      const richPct = Math.min(100, Math.max(0, parseFloat(document.getElementById('fin4RichPct')?.value) || 80)) / 100;
+      const ret = Math.max(0, parseFloat(document.getElementById('fin4Return')?.value) || 7.5) / 100;
+      const years = Math.max(5, parseInt(document.getElementById('fin4Years')?.value || '15', 10));
+      document.getElementById('fin4YearsLabel').textContent = `${years} 年`;
+
+      const surplus = Math.max(0, income - expense);
+      const poorMonthlySave = Math.max(0, surplus - poorDebt); // 剩餘放銀行 1.5%
+      const richMonthlyInvest = surplus * richPct;
+
+      let poorWealth = 0;
+      let richWealth = 0;
+      let freedomYear = null;
+      const milestones = [];
+      const bankRate = 0.015 / 12;
+      const assetRate = ret / 12;
+
+      for (let y = 1; y <= years; y++) {
+        for (let m = 0; m < 12; m++) {
+          poorWealth = poorWealth * (1 + bankRate) + poorMonthlySave;
+          richWealth = richWealth * (1 + assetRate) + richMonthlyInvest;
+        }
+        const richPassiveMonthly = (richWealth * ret) / 12;
+        if (freedomYear === null && richPassiveMonthly >= expense) {
+          freedomYear = y;
+        }
+        if (y === 1 || y === 5 || y === 10 || y === 15 || y === 20 || y === years) {
+          milestones.push({
+            y,
+            poorW: poorWealth,
+            poorPassive: (poorWealth * 0.015) / 12,
+            richW: richWealth,
+            richPassive: richPassiveMonthly
+          });
+        }
+      }
+
+      const richFinalPassive = (richWealth * ret) / 12;
+      const poorFinalPassive = (poorWealth * 0.015) / 12;
+      const freedomPct = Math.min(999, Math.round((richFinalPassive / expense) * 100));
+
+      document.getElementById('fin4Output').innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 space-y-1">
+            <div class="font-bold text-slate-600 dark:text-slate-300">😓 窮爸爸／傳統消費路徑（${years} 年後）</div>
+            <div class="text-base font-extrabold text-slate-800 dark:text-white">${fmtHKD(poorWealth)}</div>
+            <div class="text-[11px] text-slate-500">每月銀行利息: <strong>${fmtHKD(poorFinalPassive)}</strong> (僅佔開支 ${Math.round((poorFinalPassive/expense)*100)}%)</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/70 space-y-1">
+            <div class="font-bold text-amber-800 dark:text-amber-300">👑 富爸爸／生息資產路徑（${years} 年後）</div>
+            <div class="text-base font-extrabold text-emerald-700 dark:text-emerald-400">${fmtHKD(richWealth)}</div>
+            <div class="text-[11px] text-amber-900 dark:text-amber-200">每月被動現金流: <strong>${fmtHKD(richFinalPassive)}</strong> (覆蓋開支 <strong>${freedomPct}%</strong>)</div>
+          </div>
+        </div>
+        <div class="text-xs px-3 py-2 rounded-lg ${freedomYear ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'} font-semibold">
+          ${freedomYear ? `🎉 恭喜！富爸爸路徑喺第 ${freedomYear} 年已達成「被動收入 ≥ 每月基本開支 (${fmtHKD(expense)})」財務自由交叉點！` : `💡 喺 ${years} 年內，富爸爸路徑可累積 ${fmtHKD(richWealth)} 生息資產（差額領先窮爸爸 ${fmtHKD(richWealth - poorWealth)}）。`}
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[11px] text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500">
+                <th class="py-1.5 pr-2">年期</th>
+                <th class="py-1.5 px-2">窮爸爸資產 (被動月入)</th>
+                <th class="py-1.5 pl-2 text-emerald-700 dark:text-emerald-400">富爸爸資產 (被動月入)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+              ${milestones.map(m => `
+                <tr>
+                  <td class="py-1.5 pr-2 font-bold">第 ${m.y} 年</td>
+                  <td class="py-1.5 px-2 text-slate-500">${fmtHKD(m.poorW)} (${fmtHKD(m.poorPassive)}/月)</td>
+                  <td class="py-1.5 pl-2 font-semibold text-emerald-700 dark:text-emerald-400">${fmtHKD(m.richW)} (${fmtHKD(m.richPassive)}/月)</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+
+    // TOOL 5: 1M in 0941.HK + Annual Dividend Reinvested into High-Dividend ETF
+    function onTool5EtfChange() {
+      calcTool5();
+    }
+
+    function calcTool5() {
+      const cap0 = Math.max(0, parseFloat(document.getElementById('fin5Cap')?.value) || 0);
+      const y941 = Math.max(0, parseFloat(document.getElementById('fin5Yield941')?.value) || 6.7) / 100;
+      const g941 = (parseFloat(document.getElementById('fin5Growth941')?.value) || 2.5) / 100;
+      const etfRaw = (document.getElementById('fin5EtfSelect')?.value || '7.5|6.0').split('|');
+      const etfRet = parseFloat(etfRaw[0]) / 100;
+      const etfDiv = parseFloat(etfRaw[1]) / 100;
+      const years = Math.max(3, parseInt(document.getElementById('fin5Years')?.value || '10', 10));
+      const lbl = document.getElementById('fin5YearsLabel');
+      if (lbl) lbl.textContent = `${years} 年`;
+
+      let val941 = cap0;
+      let valEtf = 0;
+      let cumDivReinvested = 0;
+      const rows = [];
+
+      for (let t = 1; t <= years; t++) {
+        val941 = val941 * (1 + g941);
+        const divFrom941 = val941 * y941;
+        valEtf = valEtf * (1 + etfRet) + divFrom941;
+        cumDivReinvested += divFrom941;
+
+        const divFromEtf = valEtf * etfDiv;
+        const totalWealth = val941 + valEtf;
+        const totalAnnualDiv = divFrom941 + divFromEtf;
+
+        if (t === 1 || t === 3 || t === 5 || t === 10 || t === 15 || t === 20 || t === years) {
+          rows.push({ t, val941, valEtf, totalWealth, divFrom941, divFromEtf, totalAnnualDiv });
+        }
+      }
+
+      const finalRow = rows[rows.length - 1];
+      const out = document.getElementById('fin5Output');
+      if (!out || !finalRow) return;
+
+      out.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/60">
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">第 ${years} 年總資產 (0941 + ETF)</div>
+            <div class="text-base font-extrabold text-teal-700 dark:text-teal-300">${fmtHKD(finalRow.totalWealth)}</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">0941 底倉市值 / 累計投入股息</div>
+            <div class="text-xs font-bold text-slate-800 dark:text-slate-200 mt-0.5">${fmtHKD(finalRow.val941)} / <span class="text-emerald-600">+${fmtHKD(cumDivReinvested)}</span></div>
+          </div>
+          <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60">
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">高息 ETF 雪球倉位總值</div>
+            <div class="text-base font-extrabold text-emerald-700 dark:text-emerald-400">${fmtHKD(finalRow.valEtf)}</div>
+          </div>
+          <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60">
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">第 ${years} 年合計被動股息</div>
+            <div class="text-sm font-extrabold text-amber-700 dark:text-amber-300">${fmtHKD(finalRow.totalAnnualDiv)}/年 <span class="text-[11px] font-semibold">(${fmtHKD(finalRow.totalAnnualDiv / 12)}/月)</span></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[11px] text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500">
+                <th class="py-1.5 pr-2">年期</th>
+                <th class="py-1.5 px-2">0941 底倉市值</th>
+                <th class="py-1.5 px-2">高息 ETF 雪球倉</th>
+                <th class="py-1.5 px-2">合計總資產</th>
+                <th class="py-1.5 pl-2 text-amber-700 dark:text-amber-400">當年合計年息 (月均)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+              ${rows.map(r => `
+                <tr>
+                  <td class="py-1.5 pr-2 font-bold">第 ${r.t} 年</td>
+                  <td class="py-1.5 px-2">${fmtHKD(r.val941)}</td>
+                  <td class="py-1.5 px-2 font-semibold text-emerald-700 dark:text-emerald-400">${fmtHKD(r.valEtf)}</td>
+                  <td class="py-1.5 px-2 font-bold text-slate-900 dark:text-white">${fmtHKD(r.totalWealth)}</td>
+                  <td class="py-1.5 pl-2 font-semibold text-amber-700 dark:text-amber-400">${fmtHKD(r.totalAnnualDiv)} (${fmtHKD(r.totalAnnualDiv / 12)}/月)</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // ================= INITIALIZATION =================
+    document.addEventListener('DOMContentLoaded', () => {
+      const totalChs = libraryBooks.reduce((acc, b) => acc + (b.chaptersCount || 0), 0);
+      const headerSub = document.getElementById('headerSubtitle');
+      if (headerSub) headerSub.textContent = `收錄 ${libraryBooks.length} 大經典名著・${totalChs} 章全景深度拆解・模組化公開版`;
+      const shelfLabel = document.getElementById('shelfTabLabel');
+      if (shelfLabel) shelfLabel.textContent = `好書書架總覽 (${libraryBooks.length}本)`;
+      const bannerStats = document.getElementById('bannerStatsText');
+      if (bannerStats) bannerStats.textContent = `全數 ${libraryBooks.length} 本名著已透過獨立模組載入`;
+      const badgeStats = document.getElementById('badgeTotalBooksChapters');
+      if (badgeStats) badgeStats.textContent = `✅ 總計 ${libraryBooks.length} 本 / ${totalChs} 章`;
+
+      if (activeBook) {
+        document.getElementById('activeBookTabLabel').textContent = `正在精讀：《${activeBook.title}》`;
+      }
+      showLibraryShelf();
+    });
+  </script>
+</body>
+</html>
